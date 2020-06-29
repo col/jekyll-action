@@ -55,9 +55,10 @@ fi
 echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
 echo "::debug ::Pushing to ${repo_url}"
 
+git status && \
 git add . && \
 git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
-git push $repo_url master:$remote_branch && \
+git push -u origin $remote_branch && \
 rm -fr .git && \
 cd .. 
 
