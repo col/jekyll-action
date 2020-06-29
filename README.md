@@ -5,6 +5,9 @@ Out-of-the-box Jekyll with GitHub Pages allows you to leverage a limited, white-
 
 Note that this is a rather simple (naive maybe) Docker based action. @limjh16 has created [a JS based version of this action](https://github.com/limjh16/jekyll-action-ts) which saves the container download time and might help with non default use cases. 
 
+## Fork (col/jekyll-action)
+This fork changes how the generated content is pushed back to the `gh-pages` branch. 
+Instead of overwriting all previous commits using force commit, this version will only commit the changes. 
 
 ## Usage
 

@@ -8,6 +8,15 @@ if [ -z "${JEKYLL_PAT}" ]; then
   exit 1
 fi 
 
+# Checkout the existing static content
+repo_url="https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+git config --global user.name "${GITHUB_ACTOR}" && \
+git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+git clone $repo_url build
+cd build
+git checkout gh-pages
+cd ..
+
 echo "::debug ::Starting bundle install"
 bundle config path vendor/bundle
 bundle install
@@ -44,15 +53,11 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
 fi
 
 echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
-echo "::debug ::Pushing to https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+echo "::debug ::Pushing to ${repo_url}"
 
-remote_repo="https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git" && \
-git init && \
-git config user.name "${GITHUB_ACTOR}" && \
-git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
 git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
-git push --force $remote_repo master:$remote_branch && \
+git push $repo_url master:$remote_branch && \
 rm -fr .git && \
 cd .. 
 
